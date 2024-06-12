@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+        <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-8">
+                <div class="text-center text-white">
+                    <h1 class="display-8 fw-bolder">Платежная информация</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Введите Свои Платежные Данные...</p>
+                </div>
+            </div>
+        </header>
+        <br/>
+        <div class="container">
+            <div class="row">
+                
+                    <div class="col-md-6 offset-md-3">
+          <div class="card">
+          <div class="card-header">
+            Краткое описание заказа
+          </div>
+          <div class="card-body">
+            {% for product in cart_products %}
+                {{ product.name }}: 
+                    {% if product.is_sale %}
+                        ${{ product.sale_price }}
+                    {% else %}
+                        ${{ product.price }}
+                {% endif %}
+
+                <br/>
+                <small>Quantity: 
+                {% for key, value in quantities.items %}
+                    {% if key == product.id|slugify %}
+                        {{ value }}
+                    {% endif %}
+                {% endfor %}</small>
+                <br/><br/>
+
+            {% endfor %}
+            Total:  ${{ totals }}
+            <br/><br/>
+            <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary">Обновить</a>
+          </div>
+        </div>
+<br/><br/>
+<div class="card">
+  <div class="card-header">
+    Информация о доставке
+  </div>
+  <div class="card-body">
+    
+    Имя: {{ shipping_info.shipping_full_name }}<br/>
+    Email: {{ shipping_info.shipping_email }}<br/>
+    Адресс 1: {{ shipping_info.shipping_address1 }}<br/>
+    Адресс 2: {{ shipping_info.shipping_address2 }}<br/>
+{#    Город: {{ shipping_info.shipping_city }}<br/>#}
+{#    Область: {{ shipping_info.shipping_state }}<br/>#}
+    <br/>
+    <a href="{% url 'checkout' %}" class="btn btn-outline-secondary">Обновить</a>
+
+  </div>
+</div>
+<br/><br/>
+
+<div class="card">
+  <div class="card-header">
+    Платежная информация
+  </div>
+  <div class="card-body">
+    <form method="POST" action="{% url 'process_order' %}">
+      {% csrf_token %}
+    {{ billing_form.as_p }}
+    
+  </div>
+</div>
+<br/>
+
+
+
+<button type="submit" class="btn btn-secondary">
+  Pay Now
+</button>
+</form>
+<br/><br/>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock %}
