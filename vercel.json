@@ -6,7 +6,7 @@
     }],
     "routes": [
         {
-            "src": "ecom/urls.py",
+            "src": "ecom/(.*)",
             "dest": "ecom/wsgi.py"
         }
     ]
